@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--Title of page-->
+    <title>MoveRight</title>
+    <!--Jquery plugins-->
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.min.css">
+    <script src="jquery-3.6.1.js"></script>
+    <script src="jquery-ui/external/jquery/jquery.js"></script>
+    <script src="jquery-ui/jquery-ui.min.js"></script>
+    <!--FontAwesome import is for the heart icons-->
+    <script src="https://kit.fontawesome.com/941097557f.js" crossorigin="anonymous"></script>
+    <!--My stylesheet-->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <h1 id="h1">Move Right Property Search</h1>
+    <!--The search container consists of many regular inputs and selects/options which have been modified later in the script tags to 
+contain the JQuery UI widgets. Any tags with titles are for the JQuery tooltip widget. All named for best practice and readability in mind
+so I won't comment until further down as it is common sense -->
+    <div id="Search-container">
+        <div class="grid-row">
+            <button id="Favorites" class="grid-item top-button">Favorited Properties</button>
+            <button id="Clear" class="grid-item top-button">Clear Favorited Properties</button>
+        </div>
+        <div id="Bedrooms-container" class="grid-row">
+
+            <span class="Bedrooms-inline grid-item">
+                <h2>Min Bedrooms:</h2>
+                <input id="Bedrooms-min" value="1" readonly>
+            </span>
+
+            <span class="Bedrooms-inline grid-item">
+                <h2>Max Bedrooms:</h2>
+                <input id="Bedrooms-max" value="6" readonly>
+            </span>
+
+        </div>
+
+        <div id="Bathrooms-container" class="grid-row">
+
+            <span class="Bathrooms-inline grid-item">
+                <h2>Min Bathrooms:</h2>
+                <input id="Bathrooms-min" value="1" readonly>
+            </span>
+
+            <span class="Bathrooms-inline grid-item">
+                <h2>Max Bathrooms:</h2>
+                <input id="Bathrooms-max" value="6" readonly>
+            </span>
+
+        </div>
+
+        <div class="grid-row">
+            <div id="Type-container" class="grid-item">
+
+                <h2>Property type:</h2>
+                <select name="Property-type" id="Property-type" class="grid-item">
+                    <option value="Any" selected>Any</option>
+                    <option value="Detatched">Detatched</option>
+                    <option value="Semi-Detatched">Semi-Detatched</option>
+                    <option value="Terraced">Terraced</option>
+                    <option value="Building">Building</option>
+                    <option value="Lodge">Lodge</option>
+                    <option value="Flat">Flat</option>
+                </select>
+
+            </div>
+
+            <div id="Tenure-container" class="grid-item">
+
+                <h2>Tenure type:</h2>
+                <select name="Tenure" id="Tenure" class="grid-item">
+                    <option value="Any" selected>Any</option>
+                    <option value="Freehold">Freehold</option>
+                    <option value="Leasehold">Leasehold</option>
+                </select>
+            </div>
+        </div>
+        <div class="grid-row">
+            <div id="Date-container" class="grid-item">
+
+                <h2>Date Added:</h2>
+                <select name="Date-added" id="Date-added" class="grid-item">
+                    <option value="Anytime" selected>Anytime</option>
+                    <!--  <option value="TMonth"> This Month</option>
+            <option value="LMonth"> Last Month</option>
+            <option value="3Months"> Last 3 Months</option>
+            <option value="6Months"> Last 6 Months</option>
+            <option value="Year"> This Year</option>-->
+                    <!--I Did not finish this but it would have checked the month when the property was posted, taken our datetime and returned
+                                                            said properties-->
+                </select>
+
+            </div>
+
+            <div id="Country-container" class="grid-item">
+
+                <h2>Country of preference:</h2>
+                <select name="country" id="Country" class="grid-item">
+                    <option value="England">England</option>
+                    <option value="Scotland">Scotland</option>
+                    <option value="Wales">Wales</option>
+                    <option value="UK">UK</option>
+                    <option value="Worldwide" selected>Worldwide </option>
+                </select>
+
+            </div>
+        </div>
+
+
+        <div id="Postcode-container" class="grid-row">
+
+            <h2 class="Postcode-header grid-item">Postcode Search:</h2><br>
+            <input name="Postcode" id="Postcode" class="grid-item" type="text" placeholder="All"
+                title="You can use 'All' or one of the following to have a property return to you: 'SKY1', 'CH6', 'SO41', 'E10', 'W1K', 'E12', 'NP1' or 'SE1'. ">
+
+        </div>
+
+
+        <div id="Price-container" class="grid-row">
+
+            <h2 class="grid-item">Price Range (£)</h2>
+
+            <!--JQuery updates this input via the slider the below to show the user where on the slider they are-->
+            <input type="text" id="Price" class="Price-slider-text grid-item" readonly>
+        </div>
+        <!--This with JQuery becomes a functional slider -->
+        <div id="Price-slider" class="grid-row"
+            title="Lowest property price starts at £50,000 and highest is £4.6 Million."></div>
+
+
+    </div>
+    <div class="grid-row">
+        <!--Search Button-->
+        <button id="Search" value="Find a Home" class="grid-row">Find A Home</button>
+
+    </div>
+    <!--Placeholder for the properties to appear-->
+    <div id="Property-viewer" class="grid-row"></div>
+
+
+
+    <script>
+        //Eight JSON properties attached to a single element named 'data' which will be used for OOP and ease of pulling out correct information for us to use. 
+        //Please forgive the lengthiness of the descriptions, they were pulled straight from housing websites.
+        var data = {
+
+            "properties": [{ //All the properties follow the same conventions so I'll explain the first.
+                    "id": "P1",
+                    /*Each property is given its own unique ID which we use to correctly identify the property
+                                                   This would have been used more thoroughly for the favoriting system but I didn't get around to it.*/
+                    "type": "Detatched", //Added a few types of properties to help sell the search feature
+                    "bedrooms": 2, //bedrooms
+                    "bathrooms": 1, //bathrooms
+                    "price": 475000, //price
+                    "tenure": "Freehold", //Added tenure for more search options
+                    "description":
+
+
+                        "Property description<br><br>" +
+
+                        "Occupying a truly magical position overlooking Loch Dunvegan on the western side of Skye is this beautiful two-bedroom house." +
+                        "Contextually conceived by award-winning Dualchas Architects, the house emulates the feel and warmth of a traditional West Highland blackhouse;" +
+                        "striking greying larch external façades merge seamlessly with wonderfully light Scandinavian modernist interiors. The house has been cleverly oriented," +
+                        "within a garden of around 0.9 acres, to capture open views across the calming water and towards spectacular mountains and the striking flat-topped Macleod's Table.\n\n" +
+
+                        "The Architect\n\n" +
+
+                        "Dualchas Building Design was founded on Skye in 1996 by brothers Alasdair Stephen and Neil Stephen. The practice established a second office in Glasgow in 2006," +
+                        "and six years later, the firm was renamed Dualchas Architects. From considered beginnings, Dualchas has sought inspiration from the authentic local vernacular," +
+                        "often the blackhouse, spearheading cultural confidence and a contemporary renaissance in the architecture of the Highlands.\n" +
+
+                        "They work on remote and wild sites throughout the Highlands and Islands of the west coast of Scotland, creating quiet, restrained and beautifully crafted spaces." +
+                        "Theirs is an architecture based on the rigorous study of site, context, and landscape, inspired by a specific location, working in harmony with the surrounding" +
+                        "environment and landscape.\n\n" +
+
+                        "The Tour\n\n" +
+
+                        "Accessed via a four-mile single track, the tranquil hamlet of Skinidin is nestled on the western shore of Loch Dunvegan. A linear village, it comprises a" +
+                        "scattered collection of small crofts, houses and agricultural buildings and has mesmerising landscape views from any position.\n" +
+
+                        "Sitting modestly in its setting, the house is set back from the road by a short track leading to a generous parking area. The minimal material palette and " +
+                        "barn-like profile of the house nod to the raw and straightforward West Highland building tradition. Aluminium-clad timber windows punctuate the larch-clad façades," +
+                        " while a dark grey roof is counterpointed by a shiny stainless steel flue and several roof lights. An exacting approach to the key principles of light, space and" +
+                        "  direct visual contextuality has been adopted." +
+
+                        "A secluded glazed doorway provides the primary entrance into a lobby, with ample space for hanging coats and storing boots. Beyond the sociable open-plan kitchen," +
+                        " living and dining room unfolds. Attuned to easy living, this expansive room has an exceptional quality of ever-changing light. Swathes of floor-to-ceiling glazing" +
+                        "  and aptly positioned windows frame breathtaking views of the sloping topography towards the loch shores, heather-clad moorland and distant mountains." +
+
+                        "The seating area is centred around a warming wood-burning stove set in a large recessed chimney breast, with space for log storage. " +
+                        "On each side of the fireplace are cosy nooks, where picture windows frame the backdrop. The open-plan nature of the room also means it is large enough" +
+                        "for entertaining on a small or large scale." +
+
+                        "In warmer months, sliding glass doors open the entire dining area onto the timber deck, which wraps around the southern and easterly façades of the house." +
+                        " This is the perfect spot for a morning coffee or barbeque lunch. The kitchen, with a generous provision of cabinetry, is simply detailed and thoughtfully considered," +
+                        "  creating clever aesthetic cohesion in the spaces. A handy utility room is also positioned at ground-floor level, leading directly to a wet room. There are" +
+                        "   plenty of cupboards throughout the plan for everyday paraphernalia." +
+
+                        "A central oak staircase leads to the serene upper level. Here lie two large double bedrooms, both naturally quiet and peaceful retreats." +
+                        "A family bathroom sits centrally. Like the rest of the house, these rooms have plenty of storage cleverly built into the eaves and have far-reaching compelling views." +
+
+                        "Outdoor Space" +
+
+                        "The house sits on a slightly elevated level, with gently inclined grassy slopes falling towards the quiet approach road. Sitting lightly in its plot of just" +
+                        "over half an acre, it is visually anchored into its surrounding landscape. Sea eagles and red-and-black-throated divers fly overhead, and sheep grazing the" +
+                        "heathery banks are frequent visitors. The adjacent shores, where afternoons can be spent walking or foraging, offer invigorating wild swimming and paddle" +
+                        "boarding year-round. The house has a handy integral external store, a useful place for fishing rods and wet suits." +
+
+                        "At night, the sky is ablaze with stars, and, on occasion, the compellingly beautiful aurora borealis, the Milky Way, and noctilucent clouds make" +
+                        "spectacular appearances in winter months." +
+
+                        "The Area" +
+
+                        "Skinidin is a small settlement located four miles west of Dunvegan, a small town offering a good provision of daily amenities and a petrol station." +
+                        "Glendale village is also nearby, with a shop and post office. The main town Portree is 26 miles east, on Skye." +
+
+                        "The island is an inspiring wilderness surrounded by stunning landscapes and an extraordinary place for wildlife watching." +
+                        "Otters, seals, whales, dolphins and red deer, amongst others, roam wild on and around the island. There is excellent scope for mountain" +
+                        "walking and hiking on the Kintail hills, Cuillin Range and The Trotternish Ridge beckon directly from the house’s front door." +
+                        "The Cuillin Range has 12 Munros – peaks above 3,000 ft (914m) – for the more experienced climbers. Neist Point Lighthouse is an excellent spot" +
+                        " for its beautiful coastal scenery and to observe whales, dolphins and even the occasional basking sharks. On warmer days, Coral Beach provides" +
+                        "  a lovely backdrop for a picnic." +
+
+                        "In recent years, Skye has built a reputation as a real foodie destination." +
+                        "A particularly notable restaurant is at Three Chimneys, less than a mile from the house and once voted in the top 50 restaurants worldwide." +
+                        " Stein is home to other beautiful eateries. The Loch Bay restaurant is Michelin-starred, and The Stein Inn is the oldest inn on the island," +
+                        "  dating back to the 18th century. There is also the popular restaurant Edinbane Lodge," +
+                        "  located in a 16th-century hunting lodge and many other cafes for delicious lunches and dinners." +
+
+                        "Skye is connected to the mainland by a free road bridge. There is a bus service from Portree to Glasgow and Inverness. Otherwise," +
+                        "it is approximately a three-hour drive to Inverness, with flights to London Luton and Gatwick in around an hour. " +
+                        "There are also regular and sleeper trains from Inverness to London. Fort William is a gateway to the islands and sits about 68 miles southeast." +
+                        "Ferries from the island also go to Mallaig on the mainland and the nearby islands of Harris and Lewis." +
+
+                        "Council Tax Band: This property is currently registered for business rates.",
+                    "location": "Skinidin, Isle of Skye, Skye & Lochalsh", //I seperated the postcode to make the search easier
+                    "country": "Scotland", //country
+                    "postcode": "SKY1", //postcode
+                    "picture": "Properties/PImages/P1/P1-1.jpeg", //This is the initial image that will be show in the propertyviewer placeholder
+                    "url": "Properties/PHtml/P1.html", //This is the official html file for corresponding property
+                    "added": { //date
+                        "month": 11,
+                        "day": 4,
+                        "year": 2022
+                    }
+                },
+                {
+                    "id": "P2",
+                    "type": "Terraced",
+                    "bedrooms": 2,
+                    "bathrooms": 1,
+                    "price": 230000,
+                    "tenure": "Freehold",
+                    "description":
+
+                        "Property description\n\n" +
+                        "The Property\n" +
+                        "A beautiful two bedroom terraced cottage originally built for the farmers estate in the sought after village of Flint Mountain" +
+                        "and is offered for sale CHAIN FREE. Properties like this one don’t come on the market very often, so early viewing is highly recommended" +
+                        "to see what character and charm both the property and garden have to offer! Just from a glance you can tell that the current owners have" +
+                        "creative backgrounds as you will struggle to find a place that looks the same.\n" +
+
+                        "The property comprises; Living Room, Dining Room, Kitchen, Lean to Utility, Two Bedrooms and a Family Bathroom. To the front of the property" +
+                        "there is a very generous sized garden which is sectioned into three tiers and houses a log cabin with attached workshop, garden room, shed and" +
+                        "potting glass house. There is also off road parking for 4 to 5 cars. To the rear is a sheltered outdoor space which is currently used as a utility." +
+                        "Double glazing, combi-boiler and high speed fibre (to the door) broadband have been newly fitted within the last few years. Due to its abundance " +
+                        "of charm we advise viewing this property to fully appreciate what it has to offer.\n" +
+
+                        "Flint Mountain is a popular residential area which is situated in-between Flint and Mold towns. This peaceful location benefits countryside views" +
+                        "and scenic walking routes. Flint and Mold both offer a wide range of amenities which include schools, supermarkets, shops, post offices and doctors" +
+                        "surgeries. There are excellent road links nearby as the A55 North Wales Expressway is minutes down the road and offers commuter links to major motorways.\n" +
+
+                        "Lounge\n" +
+                        "The lounge is a very comfortable room with slate tiled floors, high ceilings with original beams, rare enamel wood stove, decorative mantle" +
+                        "and surround with slate hearth, uPVC double glazed window to the front aspect, feature wall mounted radiator, and doorway leading into the dining room.\n" +
+
+                        "Dining Room\n" +
+                        "The quaint terracotta tiled floor leads you into this functional area that has purpose built storage, shelves and boasts the original victorian wood" +
+                        "fired oven and original beams to the ceiling. From this room you see the unique silver birch spindled stairway that lead to the first floor. " +
+                        "You will also find uPVC double glazed window to the lean to aspect, wall mounted radiator, hive thermostat, doorway leading to the kitchen\n" +
+
+                        "Kitchen\n" +
+                        "The kitchen has a range of handmade wooden base units, drawers and shelves, large Belfast sink with in-keeping chrome taps," +
+                        "uPVC double glazed frosted window to the lean to aspect, integrated dishwasher, space for free standing fridge freezer and cooker," +
+                        "decorative slate splash back, and concrete worktops. Quarry tiled floor, original ceiling beams, " +
+                        "uPVC double glazed frosted glass door leading to the lean to, uPVC double glazed frosted window to the rear aspect.\n" +
+
+                        "Lean To\n" +
+                        "Tiled floor, space and plumbing for a washing machine/tumble dryer including hot water tap," +
+                        "uPVC double glazed door with frosted patterned glass to the rear aspect, uPVC double glazed window to the rear aspect\n" +
+
+                        "Landing\n" +
+                        "The landing leads to bedroom one, bathroom and bedroom two and the attic is fully boarded," +
+                        "insulated and has a light and loft ladder and also houses a Baxi High Efficiency Wall Hung Condensing Gas Boiler.\n" +
+
+                        "Bedroom One\n" +
+                        "Stepping through to this spacious master bedroom you will find a feast of pretty one-off bespoke features," +
+                        "inclusive of a wall hung plaited headboard, apple crate shelf, silver birch curtain pole and fitted wardrobes." +
+                        "This room boasts high ceilings and currently has a super king bed with plenty of room to spare. " +
+                        "uPVC double glazed window to the front aspect with fantastic views of the front garden, wall mounted radiator.\n" +
+
+                        "Bathroom\n" +
+                        "Reclaimed hard wood theme throughout with slate tiled floor, mini Belfast style sink with traditional style chrome taps and built in wooden vanity unit." +
+                        "There is a wall mounted chrome towel radiator, traditional low level toilet with bidet spray gun, bath with traditional style chrome hot and cold taps," +
+                        "tiled surround and wood panelling storage, concertina shower screen, waterfall shower with separate removable shower." +
+                        "A key feature is the reclaimed harlequin windows that bring an air of natural light into this beautiful area.\n" +
+
+                        "Bedroom Two\n" +
+                        "Ample built in storage cupboard, uPVC double glazed window to the rear aspect, stained glass window above the doorway, wall mounted radiator.\n" +
+
+                        "Front Garden\n" +
+                        "This large garden boasts an array of delightful yet functional areas. Along with its abundance of charm it boasts a wide ‘kitchen garden’:" +
+                        "Eating apple tree, cooking apple tree, plum tree, raspberry bush, blackberry bush, elderflower tree, strawberry plants," +
+                        "herb terrace and medicinal flowers.. in addition there is a large patch to plant your favourite seasonable vegetables and a glass house to start them off!" +
+                        "There is also an area to house chickens, favourably named ‘the chicken deck’.\n" +
+
+                        "The driveway has plentiful space for 4 to 5 cars and there are plenty of areas to sit throughout the entire garden - " +
+                        "whether that is on the grass or at a vantage watching the view." +
+                        "There is a wooden tool shed with attached Perspex roof that is tiled with slate. On the middle tier of the garden there is a 24ft by 12ft" +
+                        "(approx) log cabin with electric and water and storage cupboards which is currently utilised as an office. Attached to the side of the log" +
+                        "cabin there is a workshop area/storage shed. There are outside electrics, raised decking area which currently houses a hot tub, timber gate" +
+                        "and stone steps which provide another way to access the front of the house. Railway sleeper steps then lead you to the third tier of the" +
+                        "garden which has a decked area, outside garden room with electric and lights, which is currently used as a pottery room. To the side of " +
+                        "the garden room there is storage shed and outside tap. Fence panels to the rear, a slate pathway then leads to slate steps and a slate patio" +
+                        "area and raised sleeper beds, where you will find amazing views of Flint Mountain, the Wirral and surrounding areas.\n" +
+
+                        "Property ownership information\n" +
+
+                        "Council tax band: C",
+
+                    "location": "Pentre Terrace, Flint Mountain, Flint",
+                    "country": "Wales",
+                    "postcode": "CH6",
+                    "picture": "Properties/PImages/P2/P2-1.jpeg",
+                    "url": "Properties/PHtml/P2.html",
+                    "added": {
+                        "month": 11,
+                        "day": 15,
+                        "year": 2022
+                    }
+                },
+                {
+                    "id": "P3",
+                    "type": "Detatched",
+                    "bedrooms": 4,
+                    "bathrooms": 2,
+                    "price": 3750000,
+                    "tenure": "Freehold",
+                    "description":
+
+                        "Property description\n" +
+                        "One of Lymington's most substantial town houses occupying a highly convenient position on the south side of the High Street," +
+                        "which has been lovingly restored by the current owners and simultaneously remains true to its Grade II Listed heritage while " +
+                        "incorporating the highest possible standards in build quality, insulation and finish. The property also benefits from the most" +
+                        "magnificent south facing walled garden extending to approximately half an acre. Accommodation includes a long tandem garage" +
+                        "and wine cellar extending in total to over 4,800 sq ft. There is a beautiful landscaped garden extending to half an acre with" +
+                        "a heated swimming pool and pool room as well as further outbuildings. Also included in the sale is a large secure parking area" +
+                        "a short walk from Pilgrim House for multiple cars with a double garage measuring 6.90m x 5.45m and parking area 24.00m x 13.75m. EPR - C\n" +
+
+
+
+                        "The house sits in one of the town's most convenient locations on the south side of Lymington's thriving High Street and within " +
+                        "minutes of the marinas and sailing clubs of our charming market town. The town has a weekly Saturday market and also offers diverse" +
+                        "shopping facilities, a charming harbour with a historic quay and is surrounded by the outstanding natural beauty of the New Forest National Park." +
+                        "The Forest lies predominantly to the north and offers endless walks and trails on which to walk, run, ride or cycle. To the south lies the coast" +
+                        "with further walks towards Milford on Sea along the Sea Wall and unrivalled sailing facilities.\n" +
+
+                        "To the north is the New Forest village of Lyndhurst and Junction 1 of the M27 which links to the M3 for access to London. " +
+                        "There is a branch line train link to Brockenhurst Railway Station (approximately 5.5 miles) which provides a half hourly " +
+                        "service to London Waterloo with a journey time of approximately 90 minutes.\n" +
+
+
+
+                        "Pilgrim is quite simply one of Lymington's finest houses. Combining convenience, privacy, security," +
+                        "parking and a beautiful south facing walled garden with swimming pool. This rare gem is expansive," +
+                        "inviting and comfortable while also offering beautifully proportioned accommodation that has been carefully restored by the current owners." +
+                        "Behind the elegant yet understated georgian double frontage lies a blend between traditional and contemporary design throughout." +
+                        "The recent renovation remains true to the property's early 1700s roots while completely overhauling the house's infrastructure to modern standards," +
+                        "with careful thought given to insulation, wiring, plumbing and lighting as well as underfloor heating throughout the majority of the ground floor." +
+                        "The principal reception rooms are designed around the south facing walled garden which offers far more space than one might imagine and extends" +
+                        "to approximately half an acre.\n" +
+
+                        "On the ground floor, the accommodation begins with a charming, cosy reception hall with painted beams," +
+                        "oak floors and a fireplace fitted with a modern wood burning stove. Leading from this hall is the drawing room with a delightful " +
+                        "south facing bay window with garden views and a door opening onto the terrace and garden beyond. The drawing room also has a wide " +
+                        "chimney breast with a wood burning stove and carved pale stone surround. Also on the ground floor is a study / snug," +
+                        "again with a wood burning stove, full height wood panelling and ornate period style radiators.\n" +
+
+                        "Moving through to the rear of the house is a charming family room, again with an open fire place and wood burning stove. " +
+                        "From here there is an electrically powered trapdoor which provides access to steps leading down to a characterful barrel vaulted" +
+                        "cellar ideal for wine tasting parties.\n" +
+
+                        "Beyond the family is the exceptional kitchen / dining room. The east wall of this superb room is glazed floor to ceiling providing " +
+                        "an abundance of light and views across the York stone terrace to the garden beyond. In summer, four sets of crittall double glazed " +
+                        "doors can be opened to join this room with the beautiful courtyard bringing the outside in. The contemporary, " +
+                        "wooden hand-painted kitchen integrates a wide selection of top of the range appliances including several dishwashers," +
+                        "refrigeration and a variety of ovens. There is a large island which incorporates drawers and further storage as well as providing" +
+                        "an impromptu and informal space for dining. Towards the far end of the room is a superb space for a large dining table for more formal meals." +
+                        "Also off the kitchen is a separate utility room with sink, work surfaces, cupboards and space for appliances.\n" +
+
+                        "Stairs lead from the hall to the first floor where a central landing provides access to all bedrooms and the second floor." +
+                        "The master bedroom and en suite bathroom occupies the entire rear portion of the house and is beautifully decorated with built in wardrobes" +
+                        "and views over the garden, there is also under floor heating and air conditioning in the master bedroom. The bathroom is expansive with a large" +
+                        "walk in shower and free standing bath by Catchpole & Rye complete with Waterworks fittings. There are two further double bedrooms and two bathrooms" +
+                        "(one en suite) on this floor.\n" +
+
+                        "From the landing, stairs lead to the second floor where there is a landing with a door into the fourth double bedroom which has a" +
+                        "separate dressing room with a free standing copper bath as well as a separate en suite shower room.\n" +
+
+
+
+                        "The gardens lie to the rear of the house and face due south allowing for light all day with the easterly aspect of the glazed wall" +
+                        "in the kitchen allowing morning light to flood in.\n " +
+
+                        "Immediately behind the house and enclosed by the kitchen wing is a York stone terrace which is flanked by mature pleached trees " +
+                        "and forms the ideal space for outdoor dining, entertaining and relaxing. To the south of the terrace lie beatifully landscaped walled" +
+                        "gardens with manicured paths leading through established flower beds and wisteria walks all carefully managed by an automated irrigation system.\n" +
+
+                        "Beyond the wisteria walk the garden opens up with a characterful wrought iron gate in an old brick wall leading to a spectacular wide," +
+                        "level lawn and cleverly screened swimming area with heated pool and pool house. There is room for a nordic hot tub as well as a " +
+                        "delightful traditional lean-to green house which has hosted many summer parties.\n" +
+
+                        "Adjoining the house and accessible from both front and back is a long tandem garage which will comfortably fit an estate car plus one other.\n" +
+
+                        "In addition to the immediately adjacent garage, there is a larger secure parking area just around the corner close to M&S where there" +
+                        "is significant parking for boats and cars as well as a large double garage with electrically operated up and over door.\n" +
+
+                        "Services\n" +
+
+                        "Energy Performance Rating : C Current: 71 Potential: 82\n" +
+
+                        "Council Tax Band: G\n" +
+
+                        "All Mains Services Connected\n",
+
+                    "location": "High Street, Lymington",
+                    "country": "England",
+                    "postcode": "SO41",
+                    "picture": "Properties/PImages/P3/P3-1.jpeg",
+                    "url": "Properties/PHTML/P3.html",
+                    "added": {
+                        "month": 1,
+                        "day": 18,
+                        "year": 2022
+                    }
+                },
+                {
+                    "id": "P4",
+                    "type": "Semi-Detatched",
+                    "bedrooms": 2,
+                    "bathrooms": 1,
+                    "price": 500000,
+                    "tenure": "Freehold",
+                    "description":
+
+                        "Property description\n" +
+
+                        "This attractive 2 bedroom maisonette provides a quiet and secure setting within a mews development. It showcases a beautiful split-level design," +
+                        "an inviting reception, and a delightful private patio for relaxing.\n" +
+
+                        "Knotts Green Mews is excellently located, benefitting from close proximity to an array of amenities," +
+                        "including those along Lea Bridge Road. Lush Knotts Green is moments away for leisure, while Leyton Midland Road Station is also nearby.\n",
+
+                    "location": "Knotts Green Mews, Leyton, London",
+                    "country": "England",
+                    "postcode": "E10",
+                    "picture": "Properties/PImages/P4/P4-1.png",
+                    "url": "Properties/PHtml/P4.html",
+                    "added": {
+                        "month": 4,
+                        "day": 19,
+                        "year": 2014
+                    }
+                },
+                {
+                    "id": "P5",
+                    "type": "Building",
+                    "bedrooms": 11,
+                    "bathrooms": 6,
+                    "price": 4600000,
+                    "tenure": "Freehold",
+                    "description":
+
+                        "Located in the highly sought after New Bond Street quarter, this beautiful building has been designed with exceptionally high standards\n" +
+                        "to offer luxurious living throughout.\n" +
+
+                        "Originally designed by Sir John Burnett & Partners as a piano showroom the Art Deco Grade II listed building the property is entered\n" +
+                        "via central hallway with concierge desk.\n" +
+
+                        "The building's lift takes you up to the four apartments. The first three floors comprise of approx 2700sq individual 3 bedroomed residences." +
+                        "Each apartment has a dual aspect living room to the front of the building with a semi open planned kitchen. To the rear are the bedrooms" +
+                        "including Impressive master suites with dressing rooms and marble floored bathrooms. The two further bedrooms and both good sized doubles" +
+                        "with fitted wardrobes and en suites.\n" +
+
+                        "The 5 bedroomed penthouse is arranged over two floors; an incredible space, it also benefits from a private terrace off the" +
+                        "reception room and a roof terrace with views over Central London. The master suite is located on the fourth floor to the front" +
+                        "of the building and features fitted wardrobes, dressing room and exceptional luxury en suite bathroom. The four further bedrooms" +
+                        "are all very generously sized, each with fitted storage and en suites. The main living space is on the top floor (5th floor) with" +
+                        "the reception room to the rear and the kitchen to the front, both separated by a dining space with a feature fireplace and utility room." +
+                        "The kitchen is a large space with lots of countertops/storage as well as high end appliances.\n" +
+
+                        "Further to the the apartments there is also self-contained staff quarters; comprising reception room, kitchen, bedroom and bathroom on the lower ground floor.\n" +
+
+                        "Greybrook House has been carefully and thoughtfully designed throughout; apartments feature beautiful crafted windows, " +
+                        "bespoke cabinetry, oak flooring, Gaggenau appliances, Bulthaup kitchens and Taj Mahal marble amongst many things of this" +
+                        "sensational Central London property.\n" +
+
+                        "Owing to our commitment to keep both our colleagues and clients safe, we have many guided virtual viewing options available to you." +
+                        "These include video walkthroughs, 360 virtual reality tours and enhanced comprehensive photography, our teams will be happy to walk you through.\n" +
+
+                        "Brook Street sits between the world-class luxury retail offering on Bond Street and the elegantly landscaped Hanover Square." +
+
+                        "From 2021, Hanover Square's new Bond Street station will provide direct access to the Elizabeth line," +
+                        "completing the revitalisation of one of London's oldest squares.",
+
+                    "location": "Brook Street, London",
+                    "country": "England",
+                    "postcode": "W1K",
+                    "picture": "Properties/PImages/P5/P5-1.jpeg",
+                    "url": "Properties/PHtml/P5.html",
+                    "added": {
+                        "month": 5,
+                        "day": 11,
+                        "year": 2022
+                    }
+                },
+                {
+                    "id": "P6",
+                    "type": "Lodge",
+                    "bedrooms": 2,
+                    "bathrooms": 1,
+                    "price": 50000,
+                    "tenure": "Freehold",
+                    "description":
+
+                        "Property Description\n" +
+
+                        "Step into Holiday Home Ownership with one of our beautiful pre-owned properties, ready and waiting to become your new home-from-home." +
+                        "This property has been well looked after, ready to start its new life with you.\n" +
+
+                        "Experience a great value leisure home, packed with everything you could possibly need." +
+                        "The Baywood is perfect for all the family with its open-plan living, kitchen and dining space and a focal fireplace offering" +
+                        "a relaxing space to sit back and unwind. Family holidays, with no fuss.\n" +
+
+                        "The Development\n" +
+
+                        "If variety is the spice of life, Seal Bay Resort has it in spadefuls. Whether you love poolside fun, seaside strolls," +
+                        "thrilling entertainment and activities – or you’re looking for kids’ clubs, restaurants, bars and even a spa, this is the place for you!\n" +
+
+                        "Seal Bay not only offers first class entertainment and activities programmes for the entire family," +
+                        "there is so much to explore right on your doorstep. Take in the beautiful mile-long beach, or take a walk through our nature reserve," +
+                        "there is so much to do surrounding Seal Bay Resort with Chichester just down the road too!\n" +
+
+                        "Seal Bay resort is renowned for offering the Great British holiday with a modern twist." +
+                        "Its success has won it top prizes in Tourism South East’s Beautiful South Awards for Excellence for four years running.\n" +
+
+                        "Location\n" +
+
+                        "Perfectly positioned on Selsey sea front, it is the perfect place for a bucket-and-spade holiday, safe swimming, windsurfing," +
+                        "sailing and, when the conditions are right, even some surfing action. Its stunning setting on the Selsey peninsula even enjoys " +
+                        "its own micro-climate with more sunshine than any other part of the UK. And the wider beach means you can take a stroll along its" +
+                        "shore at any tide or time of the day.\n" +
+
+                        "Seal Bay resort’s West Sussex location, makes it the ideal base to explore England’s stunning south coast. " +
+                        "From the bustling cities of Portsmouth & Brighton, the cathedral city of Chichester, there are plenty of attractions close by.\n" +
+
+                        "General Information\n" +
+
+                        "All parties will be financially qualified prior to any viewing appointments being confirmed." +
+                        "The land and new homes team will discuss with all interested parties on initial enquiry.\n" +
+
+                        "Council tax band: D\n",
+
+                    "location": "Romford Road, Newham",
+                    "country": "England",
+                    "postcode": "E12",
+                    "picture": "Properties/PImages/P6/P6-1.jpeg",
+                    "url": "Properties/PHtml/P6.html",
+                    "added": {
+                        "month": 7,
+                        "day": 18,
+                        "year": 2022
+                    }
+                },
+                {
+                    "id": "P7",
+                    "type": "Detatched",
+                    "bedrooms": 3,
+                    "bathrooms": 2,
+                    "price": 700000,
+                    "tenure": "Leasehold",
+                    "description":
+
+                        "Mr. Claus has decided to retire and move somewhere warmer",
+
+                    "location": "The Grotto, North Pole",
+                    "country": "Arctic",
+                    "postcode": "NP1",
+                    "picture": "Properties/PImages//P7/P7-1.jpg",
+                    "url": "Properties/PHtml/P7.html",
+                    "added": {
+                        "month": 12,
+                        "day": 25,
+                        "year": 2022
+                    }
+                },
+                {
+                    "id": "P8",
+                    "type": "Flat",
+                    "bedrooms": 2,
+                    "bathrooms": 1,
+                    "price": 1850000,
+                    "tenure": "Leasehold",
+                    "description":
+
+                        "Property Description\n" +
+
+                        "A spectacular conversion featuring a tall pitched ceiling with striking exposed beams, occupying the top two floors of this warehouse," +
+                        "previously the home of the Metropolitan Police Evidence store. Quietly tucked away, yet close to Borough High Street." +
+                        "Vine Yard is quietly tucked away in a secluded courtyard within minutes walking distance of Borough Underground station, " +
+                        "the fantastic Borough Market and London Bridge station.\n" +
+
+                        "The sheltered access in the corner of the courtyard leads to the communal access, with shared stairs to the first floor." +
+                        "The private entrance rises to the second floor and the landing leads through the dining room to the capacious upper level " +
+                        "flooded with natural light from a Victorian style lantern roof, and the original industrial windows on the eastern side," +
+                        "together with light from central double doors which open onto the loading stage. To one side is the original fully restored loading winch.\n" +
+
+                        "Ideal as a live/work area or a fabulous entertaining room extending to almost 30 feet square, the impressive space has painted original " +
+                        "exposed floorboards with a feature open fireplace to one wall. The tall pitched ceiling continues above the mezzanine level with dining" +
+                        "area beneath, finished to a classic design with lacquered red walls. Double doors open into a white fully fitted and fully equipped kitchen.\n" +
+
+                        "In one corner a door leads to the guest bedroom with Crittal window to the courtyard and door to its own shower room with separate w.c." +
+                        "From the main hall, stairs continue to the mezzanine level with open balustrade. There is an array of built-in cupboards on both sides, " +
+                        "with natural light from the lantern roof light. A side door opens to the en-suite bathroom.\n" +
+
+                        "Quietly located at the head of this secluded mews, The Vine Yard leads from Sanctuary Street close to the junction of Borough High" +
+                        "Street and Marshalsea Road. Borough Market, London Bridge and The Shard all on the doorstep. Bermondsey Street with its eclectic" +
+                        "mix of boutiques, gastro pubs, bars and numerous restaurants is only a short walk. The City is accessible by walking over either " +
+                        "London Bridge or Tower Bridge. London Bridge station Northern and Jubilee Underground lines, plus over ground trains including " +
+                        "services to Charing Cross, Cannon Street, Blackfriars, Brighton, Bedford, Kent and East Sussex. \n" +
+                        "There is also a River Bus service available from London Bridge City Pier.\n ",
+
+                    "location": "Vine yard, London",
+                    "country": "England",
+                    "postcode": "SE1",
+                    "picture": "Properties/PImages/P8/P8-1.jpg",
+                    "url": "Properties/PHtml/P8.html",
+                    "added": {
+                        "month": 6,
+                        "day": 6,
+                        "year": 2022
+                    }
+                }
+            ]
+        }
+
+        // JQuery UI Widgets starts here, where the user will choose their search criteria
+        $(function () {
+            $("#Bedrooms-min")
+        .spinner({ //Spinner widget deals with fixed objects that the user can scroll through, in this case minimum bedrooms
+                min: 1,
+                max: 11, //min/max for user choices
+                spin: function (event, ui) {
+                    $(this).change();
+                }
+            });
+        });
+
+        $(function () {
+            $("#Bedrooms-max")
+        .spinner({ //Spinner widget deals with fixed objects that the user can scroll through, in this case maximum bedrooms
+                min: 1,
+                max: 11,
+                spin: function (event, ui) {
+                    $(this).change();
+                }
+            });
+        });
+
+        $(function () {
+            $("#Bathrooms-min")
+        .spinner({ ////Spinner widget deals with fixed objects that the user can scroll through, in this case minimum bathrooms
+                min: 1,
+                max: 6,
+                spin: function (event, ui) {
+                    $(this).change();
+                }
+            });
+        });
+
+        $(function () {
+            $("#Bathrooms-max")
+        .spinner({ //Spinner widget deals with fixed objects that the user can scroll through, in this case maximum bedrooms
+                min: 1,
+                max: 6,
+                spin: function (event, ui) {
+                    $(this).change();
+                }
+            });
+        });
+
+
+        $(function () {
+            $("#Property-type")
+        .selectmenu(); //Selectmenu widget deals with dropdown menus, in this case property type
+        });
+
+        $(function () {
+            $("#Tenure").selectmenu(); //Selectmenu widget deals with dropdown menus, in this case tenure type
+        });
+
+        $(function () {
+            $("#Date-added")
+        .selectmenu(); //Selectmenu widget deals with dropdown menus, in this case date added
+        });
+
+        $(function () {
+            $('#Country').selectmenu(); //Selectmenu widget deals with dropdown menus, in this case country
+        });
+
+        $(function () {
+            $('#Postcode'); //Couldn't find a textinput widget
+        });
+
+        $(document)
+        .tooltip(); //Tooltip brings up a nice box whenever the user hovers over anything that has the title attribute
+
+
+        //This adds the JQuery slider widget to the previously empty div with the ID of Price-slider
+        $(function () {
+            $("#Price-slider").slider({
+                range: true,
+                min: 30000, //minimum price
+                max: 5000000, //maximum price    
+                step: 5000, //steps in price
+                slide: function (event, ui) {
+                    $("#Price").val("£" + ui.values[0] + " - £" + ui.values[
+                    1]); //Collects the values of the slider
+                }
+            });
+            //Adds the price of both sliders to the readonly input with the ID of Price   
+            $("#Price").val("£" + $("#Price-slider").slider("values", 0) + " - £" + $("#Price-slider").slider(
+                "values", 1));
+
+
+
+        });
+
+        //SEARCH BUTTON
+        $(function () {
+            $("#Search").on("click", function () {
+
+                //ASSIGN THE USER INPUT TO VARIBLES TO ACCESS LATER 
+                var country = $("#Country").val();
+                var bedroomsMin = $("#Bedrooms-min").val();
+                var bedroomsMax = $("#Bedrooms-max").val();
+                var bathroomsMin = $("#Bathrooms-min").val();
+                var bathroomsMax = $("#Bathrooms-max").val();
+                var propertyType = $("#Property-type").val();
+                var tenure = $("#Tenure").val();
+                var date = $("#Date-added").val();
+                var postcode = $("#Postcode").val();
+                var priceRangeMin = $("#Price-slider").slider("option", "values")[0];
+                var priceRangeMax = $("#Price-slider").slider("option", "values")[1];
+
+                //display in unordered lists like on rightmove and initialize the viewer
+                var propertyViewer = "<ul class='property-container'>";
+
+                //The for loop will go through all eight properties and check itself against the search varibles that have been set by the user
+                for (var i in data.properties) {
+                    if ((propertyType == data.properties[i].type) || (propertyType ==
+                        "Any")) { //either the specific type or all of them
+                        if ((tenure == data.properties[i].tenure) || (propertyType ==
+                            "Any")) { //either the specific type or all of them
+                            if ((bedroomsMin <= data.properties[i].bedrooms && bedroomsMax >= data
+                                    .properties[i].bedrooms)) { //bedrooms range
+                                if ((bathroomsMin <= data.properties[i].bathrooms && bathroomsMax >=
+                                        data.properties[i].bathrooms)) { //bathrooms range
+                                    if ((date == data.properties[i].added.month) || (date ==
+                                        "Anytime")) { //either the specific timeframe or all of them, currently only Anytime
+                                        if ((data.properties[i].price >= priceRangeMin && data
+                                                .properties[i].price <= priceRangeMax
+                                                )) { //Takes the slider price range before returning
+                                            if ((postcode == "All" || postcode == 'all' || postcode ==
+                                                    data.properties[i].postcode
+                                                    )) { //Checks postcode, refer to postcode tooltip for available postcodes
+
+
+                                                //This extended the properViewer varible and produces blocks for the properties in list items. including location, postcode, price, picture, description, url
+                                                //It looks quite messy as I had to include lots of html code so I could later change the layout in CSS and connect the different buttons.
+                                                //The View home button works but the favorite button does not, the favorite feature in general doesn't exist here...
+                                                propertyViewer += '<h2><li>' + data.properties[i]
+                                                    .location + ', ' + data.properties[i].postcode +
+                                                    '<br>£' + data.properties[i].price + '</li></h2>' +
+                                                    '<br><img class="property-preview-image" src=' +
+                                                    data.properties[i].picture +
+                                                    '><p class="property-preview-desc">' + data
+                                                    .properties[i].description +
+                                                    '</p><button><a href="' + data.properties[i].url +
+                                                    '">View Home</a></button><div class="button-container"><button id="' +
+                                                    data.properties[i].id +
+                                                    '"class="not-favorite" onlclick="favorite()"><i class="fa-solid fa-heart"></i></button></div>';
+
+
+
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                propertyViewer += "</ul>"; //closes the unordered list
+
+                //Writes to the html and show the user the correct search
+                document.getElementById("Property-viewer").innerHTML = propertyViewer;
+
+
+            });
+        });
+        //FAVORITE ARRAY 
+
+        var faveArray = [];
+        //The favoriting system would have started from here, I couldn't get the colours to change on this main page but the hearts do change on the property pages
+        //And thats all I have 
+        function favorite() {
+
+            if ($('button').hasClass("not-favorite")) {
+                console.log('buttonID');
+                $("button").removeClass("not-favorite");
+                $("button").addClass("favorite");
+                $("button").css("color", "red");
+
+                //ADD PROPERTY TO LIST FROM HERE
+            } else if ($("button").hasClass("favorite")) {
+                $("a:first").removeClass("favorite");
+                $("a:first").addClass("not-favorite");
+                $("a:first").css("color", "grey");
+
+                //REMOVE PROPERTY FROM LIST
+            }
+        }
+    </script>
+
+</body>
+
+</html>

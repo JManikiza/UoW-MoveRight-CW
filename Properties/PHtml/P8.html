@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vine yard, London</title>
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="jquery-3.6.1.js"></script>
+    <script src="jquery-ui/external/jquery/jquery.js"></script>
+    <script src="jquery-ui/jquery-ui.min.js"></script>
+    <!--FontAwesome import is for the heart icons-->
+    <script src="https://kit.fontawesome.com/941097557f.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <h2>MoveRight Presents</h2>
+
+
+    <div class="Property-container">
+        <!--The heart changing colour works but no favoriting system-->
+
+        <div class="Favorite-container">
+            <a onclick=favorite() class="not-favorite">
+                <i class="fa-solid fa-heart"></i>
+            </a>
+
+        </div>
+        <h3 id="P8" class="Property-header">Vine yard, London, SE1</h3>
+        <img src="../PImages/P8/P8-1.jpg" class="Property-main-image">
+        <!--Image thumbnails, does not open in to bigger images as of yet-->
+
+        <div id="image-thumbnails-container">
+            <img class="image-thumbnails-container" src="../PImages/P8/P8-2.jpg" class="Property-image">
+            <img class="image-thumbnails-container" src="../PImages/P8/P8-3.jpg" class="Property-image">
+            <img class="image-thumbnails-container" src="../PImages/P8/P8-4.jpg" class="Property-image">
+            <img class="image-thumbnails-container" src="../PImages/P8/P8-5.jpg" class="Property-image">
+            <img class="image-thumbnails-container" src="../PImages/P8/P8-6.jpg" class="Property-image">
+            <img class="image-thumbnails-container" src="../PImages/P8/P8-7.jpg" class="Property-image">
+            <img class="image-thumbnails-container" src="../PImages/P8/P8-8.jpg" class="Property-image">
+        </div>
+        <!--Tabs Jquery UI Widget-->
+
+        <div id="Property-tabs">
+            <ul>
+                <li><a href="#Description">Description</a></li>
+                <!--First tab header-->
+                <li><a href="#Floorplan">Floorplan</a></li>
+                <!--Second tab header-->
+                <li><a href="#Map">Map</a></li>
+                <!--Third tab header-->
+            </ul>
+
+            <div id="Description">
+
+                <p>£1850000,<br>
+                    Flat,<br>
+                    Two Bedrooms,<br>
+                    One Bathroom,<br>
+                    Leasehold<br>
+                    Added: 06/06/2022<br><br>
+
+                    <h4>Property description</h4><br>
+
+
+                    A spectacular conversion featuring a tall pitched ceiling with striking exposed beams, occupying the
+                    top two floors of this warehouse,
+                    previously the home of the Metropolitan Police Evidence store. Quietly tucked away, yet close to
+                    Borough High Street.
+                    Vine Yard is quietly tucked away in a secluded courtyard within minutes walking distance of Borough
+                    Underground station,
+                    the fantastic Borough Market and London Bridge station.<br><br>
+
+                    The sheltered access in the corner of the courtyard leads to the communal access, with shared stairs
+                    to the first floor.
+                    The private entrance rises to the second floor and the landing leads through the dining room to the
+                    capacious upper level
+                    flooded with natural light from a Victorian style lantern roof, and the original industrial windows
+                    on the eastern side,
+                    together with light from central double doors which open onto the loading stage. To one side is the
+                    original fully restored loading winch.<br><br>
+
+                    Ideal as a live/work area or a fabulous entertaining room extending to almost 30 feet square, the
+                    impressive space has painted original
+                    exposed floorboards with a feature open fireplace to one wall. The tall pitched ceiling continues
+                    above the mezzanine level with dining
+                    area beneath, finished to a classic design with lacquered red walls. Double doors open into a white
+                    fully fitted and fully equipped kitchen.<br><br>
+
+                    In one corner a door leads to the guest bedroom with Crittal window to the courtyard and door to its
+                    own shower room with separate w.c.
+                    From the main hall, stairs continue to the mezzanine level with open balustrade. There is an array
+                    of built-in cupboards on both sides,
+                    with natural light from the lantern roof light. A side door opens to the en-suite bathroom.<br><br>
+
+                    Quietly located at the head of this secluded mews, The Vine Yard leads from Sanctuary Street close
+                    to the junction of Borough High
+                    Street and Marshalsea Road. Borough Market, London Bridge and The Shard all on the doorstep.
+                    Bermondsey Street with its eclectic
+                    mix of boutiques, gastro pubs, bars and numerous restaurants is only a short walk. The City is
+                    accessible by walking over either
+                    London Bridge or Tower Bridge. London Bridge station Northern and Jubilee Underground lines, plus
+                    over ground trains including
+                    services to Charing Cross, Cannon Street, Blackfriars, Brighton, Bedford, Kent and East Sussex.
+                    <br><br>
+                    There is also a River Bus service available from London Bridge City Pier.
+
+                </p>
+            </div>
+            <div id="Floorplan">
+                <img src="../PImages/P8/P8-FP.png" class="floor-plans">
+            </div>
+            <div id="Map">
+                <!--Google maps Iframe of property location-->
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d4967.390815000631!2d-0.0939474!3d51.5004568!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604a761885feb%3A0x1a36836c8160bd9!2sVine%20Yard%20Studios!5e0!3m2!1sen!2suk!4v1673211241486!5m2!1sen!2suk"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                <script>
+                    $(".Property-container").tabs({
+                        active: 1
+                    });
+
+                    function favorite() {
+                        var add = $("h3").attr("id");
+                        console.log(add);
+
+                        if ($("a:first").hasClass("not-favorite")) {
+                            $("a:first").removeClass("not-favorite");
+                            $("a:first").addClass("favorite");
+                            $("a:first").css("color", "red");
+
+                            //ADD PROPERTY TO LIST FROM HERE
+                        } else if ($("a:first").hasClass("favorite")) {
+                            $("a:first").removeClass("favorite");
+                            $("a:first").addClass("not-favorite");
+                            $("a:first").css("color", "grey");
+
+                            //REMOVE PROPERTY FROM LIST
+                        }
+                    }
+                </script>
+
+</body>
+
+</html>

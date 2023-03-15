@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Brook Street, London</title>
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="jquery-3.6.1.js"></script>
+    <script src="jquery-ui/external/jquery/jquery.js"></script>
+    <script src="jquery-ui/jquery-ui.min.js"></script>
+    <!--FontAwesome import is for the heart icons-->
+    <script src="https://kit.fontawesome.com/941097557f.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <h2>MoveRight Presents</h2>
+
+
+    <div class="Property-container">
+        <!--The heart changing colour works but no favoriting system-->
+
+        <div class="Favorite-container">
+            <a onclick=favorite() class="not-favorite">
+                <i class="fa-solid fa-heart"></i>
+            </a>
+
+        </div>
+        <h3 id="P5" class="Property-header">Brook Street, London, W1K</h3>
+        <img src="../PImages/P5/P5-1.jpeg" class="Property-main-image">
+        <!--Image thumbnails, does not open in to bigger images as of yet-->
+
+        <div id="image-thumbnails-container">
+            <img class="image-thumbnails" src="../PImages/P5/P5-2.jpeg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P5/P5-3.jpeg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P5/P5-4.jpeg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P5/P5-5.jpeg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P5/P5-6.jpeg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P5/P5-7.jpeg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P5/P5-8.jpeg" class="Property-image">
+        </div>
+        <!--Tabs Jquery UI Widget-->
+
+        <div id="Property-tabs">
+            <ul>
+                <li><a href="#Description">Description</a></li>
+                <!--First tab header-->
+                <li><a href="#Floorplan">Floorplan</a></li>
+                <!--Second tab header-->
+                <li><a href="#Map">Map</a></li>
+                <!--Third tab header-->
+            </ul>
+
+            <div id="Description">
+
+                <p>£4600000,<br>
+                    Building,<br>
+                    Eleven Bedrooms,<br>
+                    Six Bathroom,<br>
+                    Freehold<br>
+                    Added: 11/05/2022<br><br>
+
+                    <h4>Property description</h4><br>
+
+
+                    Located in the highly sought after New Bond Street quarter, this beautiful building has been
+                    designed with exceptionally high standards
+                    to offer luxurious living throughout.<br><br>
+
+                    Originally designed by Sir John Burnett & Partners as a piano showroom the Art Deco Grade II listed
+                    building the property is entered
+                    via central hallway with concierge desk.<br><br>
+
+                    The building's lift takes you up to the four apartments. The first three floors comprise of approx
+                    2700sq individual 3 bedroomed residences.
+                    Each apartment has a dual aspect living room to the front of the building with a semi open planned
+                    kitchen. To the rear are the bedrooms
+                    including Impressive master suites with dressing rooms and marble floored bathrooms. The two further
+                    bedrooms and both good sized doubles
+                    with fitted wardrobes and en suites.<br><br>
+
+                    The 5 bedroomed penthouse is arranged over two floors; an incredible space, it also benefits from a
+                    private terrace off the
+                    reception room and a roof terrace with views over Central London. The master suite is located on the
+                    fourth floor to the front
+                    of the building and features fitted wardrobes, dressing room and exceptional luxury en suite
+                    bathroom. The four further bedrooms
+                    are all very generously sized, each with fitted storage and en suites. The main living space is on
+                    the top floor (5th floor) with
+                    the reception room to the rear and the kitchen to the front, both separated by a dining space with a
+                    feature fireplace and utility room.
+                    The kitchen is a large space with lots of countertops/storage as well as high end
+                    appliances.<br><br>
+
+                    Further to the the apartments there is also self-contained staff quarters; comprising reception
+                    room, kitchen, bedroom and bathroom on the lower ground floor.<br><br>
+
+                    Greybrook House has been carefully and thoughtfully designed throughout; apartments feature
+                    beautiful crafted windows,
+                    bespoke cabinetry, oak flooring, Gaggenau appliances, Bulthaup kitchens and Taj Mahal marble amongst
+                    many things of this
+                    sensational Central London property.<br><br>
+
+                    Owing to our commitment to keep both our colleagues and clients safe, we have many guided virtual
+                    viewing options available to you.
+                    These include video walkthroughs, 360 virtual reality tours and enhanced comprehensive photography,
+                    our teams will be happy to walk you through.<br><br>
+
+                    Brook Street sits between the world-class luxury retail offering on Bond Street and the elegantly
+                    landscaped Hanover Square.<br><br>
+
+                    From 2021, Hanover Square's new Bond Street station will provide direct access to the Elizabeth
+                    line,
+                    completing the revitalisation of one of London's oldest squares.
+
+
+                </p>
+            </div>
+            <div id="Floorplan">
+                <img src="../PImages/P5/P5-FP.png" class="floor-plans">
+            </div>
+            <div id="Map">
+                <!--Google maps Iframe of property location-->
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.018220521578!2d-0.14942528410263406!3d51.51288171812325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052c9b45d89b%3A0xd8e42f06738277cb!2sBrook%20Street%2C%20London%20W1K!5e0!3m2!1sen!2suk!4v1673209407703!5m2!1sen!2suk"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe> </div>
+        </div>
+    </div>
+
+    <script>
+        $(".Property-container").tabs({
+            active: 1
+        });
+
+        function favorite() {
+            var add = $("h3").attr("id");
+            console.log(add);
+
+            if ($("a:first").hasClass("not-favorite")) {
+                $("a:first").removeClass("not-favorite");
+                $("a:first").addClass("favorite");
+                $("a:first").css("color", "red");
+
+                //ADD PROPERTY TO LIST FROM HERE
+            } else if ($("a:first").hasClass("favorite")) {
+                $("a:first").removeClass("favorite");
+                $("a:first").addClass("not-favorite");
+                $("a:first").css("color", "grey");
+
+                //REMOVE PROPERTY FROM LIST
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Romford Road, Newham</title>
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="../../..style.css">
+    <script src="jquery-3.6.1.js"></script>
+    <script src="jquery-ui/external/jquery/jquery.js"></script>
+    <script src="jquery-ui/jquery-ui.min.js"></script>
+    <!--FontAwesome import is for the heart icons-->
+    <script src="https://kit.fontawesome.com/941097557f.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <h2>MoveRight Presents</h2>
+
+
+    <div class="Property-container">
+        <!--The heart changing colour works but no favoriting system-->
+
+        <div class="Favorite-container">
+            <a onclick=favorite() class="not-favorite">
+                <i class="fa-solid fa-heart"></i>
+            </a>
+
+        </div>
+        <h3 id="P6" class="Property-header">Romford Road, Newham, E12</h3>
+        <img src="../PImages/P6/P6-1.jpeg" class="Property-main-image">
+        <!--Image thumbnails, does not open in to bigger images as of yet-->
+
+        <div id="image-thumbnails-container">
+            <img class="image-thumbnails" src="../PImages/P6/P6-2.jpeg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P6/P6-3.jpeg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P6/P6-4.jpeg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P6/P6-5.jpeg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P6/P6-6.jpeg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P6/P6-7.jpeg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P6/P6-8.jpeg" class="Property-image">
+        </div>
+        <!--Tabs Jquery UI Widget-->
+
+        <div id="Property-tabs">
+            <ul>
+                <li><a href="#Description">Description</a></li>
+                <!--First tab header-->
+                <li><a href="#Floorplan">Floorplan</a></li>
+                <!--Second tab header-->
+                <li><a href="#Map">Map</a></li>
+                <!--Third tab header-->
+            </ul>
+
+            <div id="Description">
+
+                <p>£50000,<br>
+                    Lodge,<br>
+                    Two Bedrooms,<br>
+                    One Bathroom,<br>
+                    Freehold<br>
+                    Added: 18/07/2022<br><br>
+
+                    <h4>Property description</h4><br>
+
+                    Step into Holiday Home Ownership with one of our beautiful pre-owned properties, ready and waiting
+                    to become your new home-from-home.
+                    This property has been well looked after, ready to start its new life with you.<br><br>
+
+                    Experience a great value leisure home, packed with everything you could possibly need.
+                    The Baywood is perfect for all the family with its open-plan living, kitchen and dining space and a
+                    focal fireplace offering
+                    a relaxing space to sit back and unwind. Family holidays, with no fuss.<br><br>
+
+                    <b>The Development</b><br><br>
+
+                    If variety is the spice of life, Seal Bay Resort has it in spadefuls. Whether you love poolside fun,
+                    seaside strolls,
+                    thrilling entertainment and activities – or you’re looking for kids’ clubs, restaurants, bars and
+                    even a spa, this is the place for you!<br><br>
+
+                    Seal Bay not only offers first class entertainment and activities programmes for the entire family,
+                    there is so much to explore right on your doorstep. Take in the beautiful mile-long beach, or take a
+                    walk through our nature reserve,
+                    there is so much to do surrounding Seal Bay Resort with Chichester just down the road too!<br><br>
+
+                    Seal Bay resort is renowned for offering the Great British holiday with a modern twist.
+                    Its success has won it top prizes in Tourism South East’s Beautiful South Awards for Excellence for
+                    four years running.<br><br>
+
+                    <b>Location</b><br><br>
+
+                    Perfectly positioned on Selsey sea front, it is the perfect place for a bucket-and-spade holiday,
+                    safe swimming, windsurfing,
+                    sailing and, when the conditions are right, even some surfing action. Its stunning setting on the
+                    Selsey peninsula even enjoys
+                    its own micro-climate with more sunshine than any other part of the UK. And the wider beach means
+                    you can take a stroll along its
+                    shore at any tide or time of the day.<br><br>
+
+                    Seal Bay resort’s West Sussex location, makes it the ideal base to explore England’s stunning south
+                    coast.
+                    From the bustling cities of Portsmouth & Brighton, the cathedral city of Chichester, there are
+                    plenty of attractions close by.<br><br>
+
+                    <b>General Information</b><br><br>
+
+                    All parties will be financially qualified prior to any viewing appointments being confirmed.<br>
+                    The land and new homes team will discuss with all interested parties on initial enquiry.<br><br>
+
+                    Council tax band: D
+
+                </p>
+            </div>
+            <div id="Floorplan">
+                <img src="../PImages/P6/P6-FP.png" class="floor-plans">
+            </div>
+            <div id="Map">
+                <!--Google maps Iframe of property location-->
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4976.1946490254595!2d0.046869236614121075!3d51.55132557465993!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a7a940546d41%3A0xdd9849b861900c10!2sManor%20Park%20Cemetery%20%26%20Crematorium!5e0!3m2!1sen!2suk!4v1673209956217!5m2!1sen!2suk"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe> </div>
+        </div>
+
+        <script>
+            $(".Property-container").tabs({
+                active: 1
+            });
+
+            function favorite() {
+                var add = $("h3").attr("id");
+                console.log(add);
+
+                if ($("a:first").hasClass("not-favorite")) {
+                    $("a:first").removeClass("not-favorite");
+                    $("a:first").addClass("favorite");
+                    $("a:first").css("color", "red");
+
+                    //ADD PROPERTY TO LIST FROM HERE
+                } else if ($("a:first").hasClass("favorite")) {
+                    $("a:first").removeClass("favorite");
+                    $("a:first").addClass("not-favorite");
+                    $("a:first").css("color", "grey");
+
+                    //REMOVE PROPERTY FROM LIST
+                }
+            }
+        </script>
+
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>The Grotto, North Pole</title>
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="jquery-3.6.1.js"></script>
+    <script src="jquery-ui/external/jquery/jquery.js"></script>
+    <script src="jquery-ui/jquery-ui.min.js"></script>
+    <!--FontAwesome import is for the heart icons-->
+    <script src="https://kit.fontawesome.com/941097557f.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <h2>MoveRight Presents</h2>
+
+
+    <div class="Property-container">
+        <!--The heart changing colour works but no favoriting system-->
+
+        <div class="Favorite-container">
+            <a onclick=favorite() class="not-favorite">
+                <i class="fa-solid fa-heart"></i>
+            </a>
+
+        </div>
+        <h3 id="P7" class="Property-header">The Grotto, North Pole, NP1</h3>
+        <img src="../PImages/P7/P7-1.jpg" class="Property-main-image">
+        <!--Image thumbnails, does not open in to bigger images as of yet-->
+
+        <div id="image-thumbnails-container">
+            <img class="image-thumbnails" src="../PImages/P7/P7-2.jpg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P7/P7-3.jpg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P7/P7-4.jpg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P7/P7-5.jpg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P7/P7-6.jpg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P7/P7-7.jpg" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P7/P7-8.jpg" class="Property-image">
+        </div>
+        <!--Tabs Jquery UI Widget-->
+
+        <div id="Property-tabs">
+            <ul>
+                <li><a href="#Description">Description</a></li>
+                <!--First tab header-->
+                <li><a href="#Floorplan">Floorplan</a></li>
+                <!--Second tab header-->
+                <li><a href="#Map">Map</a></li>
+                <!--Third tab header-->
+            </ul>
+
+            <div id="Description">
+
+                <p>£700000,<br>
+                    Detatched,<br>
+                    Three Bedrooms,<br>
+                    Two Bathroom,<br>
+                    Leasehold<br>
+                    Added: 25/12/2022<br><br>
+
+                    <h4>Property description</h4><br>
+
+
+                    Mr. Claus has decided to retire and move somewhere warmer
+
+                </p>
+            </div>
+            <div id="Floorplan">
+                <img src="../PImages/P7/P7-FP.jpg" class="floor-plans">
+            </div>
+            <div id="Map">
+                <!--Google maps Iframe of property location-->
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30966.06637000509!2d-135.2090229662662!3d84.96188225805248!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4f9344da9515b951%3A0x4518d0c4d5c68876!2sNorth%20Pole!5e0!3m2!1sen!2suk!4v1673210364841!5m2!1sen!2suk"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <script>
+                    $(".Property-container").tabs({
+                        active: 1
+                    });
+
+                    function favorite() {
+                        var add = $("h3").attr("id");
+                        console.log(add);
+
+                        if ($("a:first").hasClass("not-favorite")) {
+                            $("a:first").removeClass("not-favorite");
+                            $("a:first").addClass("favorite");
+                            $("a:first").css("color", "red");
+
+                            //ADD PROPERTY TO LIST FROM HERE
+                        } else if ($("a:first").hasClass("favorite")) {
+                            $("a:first").removeClass("favorite");
+                            $("a:first").addClass("not-favorite");
+                            $("a:first").css("color", "grey");
+
+                            //REMOVE PROPERTY FROM LIST
+                        }
+                    }
+                </script>
+
+</body>
+
+</html>

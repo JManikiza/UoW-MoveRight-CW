@@ -1,0 +1,81 @@
+#Search-container {
+    max-width: 1335px;
+    margin: 0 auto;
+  }
+
+  /*Using flex box to make the layout visually appealing for the user*/
+  .grid-row {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+  .grid-item {
+    height: 90px;
+    flex-basis: 20%;
+    -ms-flex: auto;
+    width: 400px;
+    position: relative;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  h2{
+    font-size: 16px;
+  }
+
+  input, select{
+    height: 20px;
+    width: 240px;
+  }
+
+  #Postcode{
+    border-radius: 10px;
+    height: 15px;
+    left: 20px;
+    top:40px;
+}
+
+.Price-slider-text{
+    border-radius: 10px;
+    height: 15px;
+    left: 20px;
+    top:23px;}
+
+#Price-slider{
+    width: 500px;
+    left:400px;
+    position: relative;
+    bottom: 35px;
+}
+
+.Postcode-header{
+    top: 23px;
+}
+
+.top-button{
+    height:18px;
+    padding: 1px 5px 0px 5px;
+}
+
+.property-previews{
+    height:550px;
+}
+
+.property-preview-image{
+    height:50vh;
+    width:40vw;
+}
+
+.property-preview-desc{
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    height: 100px;
+    width: 70vw;
+}
+
+.image-thumbnails{
+    height:60px;
+    width:60px;
+    
+}

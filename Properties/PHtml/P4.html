@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Knotts Green Mews, Leyton</title>
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="../../../style.css">
+    <script src="jquery-3.6.1.js"></script>
+    <script src="jquery-ui/external/jquery/jquery.js"></script>
+    <script src="jquery-ui/jquery-ui.min.js"></script>
+    <!--FontAwesome import is for the heart icons-->
+    <script src="https://kit.fontawesome.com/941097557f.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <h2>MoveRight Presents</h2>
+
+
+    <div class="Property-container">
+        <!--The heart changing colour works but no favoriting system-->
+        <div class="Favorite-container">
+            <a onclick=favorite() class="not-favorite">
+                <i class="fa-solid fa-heart"></i>
+            </a>
+
+        </div>
+        <h3 id="P4" class="Property-header">Knotts Green Mews, Leyton, E10</h3>
+        <img src="../PImages/P4/P4-1.png" class="Property-main-image">
+
+        <!--Image thumbnails, does not open in to bigger images as of yet-->
+        <div id="image-thumbnails-container">
+            <img class="image-thumbnails" src="../PImages/P4/P4-2.png" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P4/P4-3.png" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P4/P4-4.png" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P4/P4-5.png" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P4/P4-6.png" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P4/P4-7.png" class="Property-image">
+            <img class="image-thumbnails" src="../PImages/P4/P4-8.png" class="Property-image">
+        </div>
+
+        <!--Tabs Jquery UI Widget-->
+        <div id="Property-tabs">
+            <ul>
+
+                <li><a href="#Description">Description</a></li>
+                <!--First tab header-->
+                <li><a href="#Floorplan">Floorplan</a></li>
+                <!--Second tab header-->
+                <li><a href="#Map">Map</a></li>
+                <!--Third tab header-->
+            </ul>
+
+            <div id="Description">
+
+                <p>£500000,<br>
+                    Semi-Detatched House,<br>
+                    Two Bedrooms,<br>
+                    One Bathroom,<br>
+                    Freehold<br>
+                    Added: 19/04/2014<br><br>
+
+                    <h4>Property description</h4><br>
+
+
+                    This attractive 2 bedroom maisonette provides a quiet and secure setting within a mews development.
+                    It showcases a beautiful split-level design,
+                    an inviting reception, and a delightful private patio for relaxing.
+
+                    Knotts Green Mews is excellently located, benefitting from close proximity to an array of amenities,
+                    including those along Lea Bridge Road. Lush Knotts Green is moments away for leisure, while Leyton
+                    Midland Road Station is also nearby.
+
+
+
+                </p>
+            </div>
+            <div id="Floorplan">
+                <img src="../PImages/P4/P4-FP.png" class="floor-plans">
+            </div>
+            <div id="Map">
+                <!--Google maps Iframe of property location-->
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2523.928746302296!2d-1.5439348841238223!3d50.75835487301161!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487386d193240331%3A0x4980fd98b30dcc56!2sHigh%20St%2C%20Lymington!5e0!3m2!1sen!2suk!4v1673207592104!5m2!1sen!2suk"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(".Property-container").tabs({
+            active: 1
+        });
+
+        function favorite() {
+            var add = $("h3").attr("id");
+            console.log(add);
+
+            if ($("a:first").hasClass("not-favorite")) {
+                $("a:first").removeClass("not-favorite");
+                $("a:first").addClass("favorite");
+                $("a:first").css("color", "red");
+
+                //NEEDS CODE TO ADD TO PROPERTY LIST FROM HERE
+
+            } else if ($("a:first").hasClass("favorite")) {
+                $("a:first").removeClass("favorite");
+                $("a:first").addClass("not-favorite");
+                $("a:first").css("color", "grey");
+
+                //NEEDS CODE TO REMOVE PROPERTY FROM LIST
+            }
+        }
+    </script>
+
+</body>
+
+</html>
